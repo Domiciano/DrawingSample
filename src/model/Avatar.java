@@ -35,6 +35,14 @@ public class Avatar {
 		gc.drawImage(image, X, Y);
 	}
 
+	public void moveUp() {
+		Y-=2;
+	}
+
+	public void moveDown() {
+		Y+=2;
+	}
+
 }
 
 

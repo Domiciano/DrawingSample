@@ -25,47 +25,58 @@ public class MainWindow implements Initializable {
 		canvas.setFocusTraversable(true);
 		s1 = new Screen1(canvas);
 		s2 = new Screen2(canvas);
-		
 		events();
+		
 		new Thread(() -> {
 			while (true) {
-
 				switch (screen) {
-					case 0:
-						s1.paint();
-						break;
-					
-					case 1:
-						s2.paint();
-						break;
-						
-				}
+				case 0:
+					s1.paint();
+					break;
 
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				case 1:
+					s2.paint();
+					break;
+
 				}
+				pause(50);
 			}
 		}).start();
 
 	}
 
+	private void pause(int time) {
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
 	private void events() {
 		canvas.setOnKeyPressed(e -> {
-			System.out.println("Beta");
-			if (e.getCode().equals(KeyCode.UP)) {
-				System.out.println("UP");
-			} else if (e.getCode().equals(KeyCode.K)) {
-				System.out.println("K");
-			} else if (e.getCode().equals(KeyCode.SPACE)) {
-				System.out.println("SPACE");
+			switch (screen) {
+			case 0:
+				s1.onKeyPressed(e);
+				break;
+			case 1:
+				s2.onKeyPressed(e);
+				break;
+
 			}
 		});
 
 		canvas.setOnMouseClicked(e -> {
+			switch (screen) {
+			case 0:
+				s1.onClick();
+				break;
+			case 1:
+				s2.onClick();
+				break;
 
+			}
 		});
 	}
 
