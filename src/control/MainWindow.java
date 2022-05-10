@@ -1,6 +1,8 @@
 package control;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -10,6 +12,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import screens.Screen1;
 import screens.Screen2;
+import screens.ScreenBase;
 
 public class MainWindow implements Initializable {
 
@@ -17,25 +20,27 @@ public class MainWindow implements Initializable {
 	private Canvas canvas;
 
 	private int screen = 0;
-	private Screen1 s1;
-	private Screen2 s2;
+	private List<ScreenBase> screens;
+
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		screens = new ArrayList<>();
+		screens.add(new Screen1(canvas));
+		screens.add(new Screen2(canvas));	
 		canvas.setFocusTraversable(true);
-		s1 = new Screen1(canvas);
-		s2 = new Screen2(canvas);
+	
 		events();
 		
 		new Thread(() -> {
 			while (true) {
 				switch (screen) {
 				case 0:
-					s1.paint();
+					screens.get(0).paint();
 					break;
 
 				case 1:
-					s2.paint();
+					screens.get(1).paint();
 					break;
 
 				}
@@ -55,28 +60,16 @@ public class MainWindow implements Initializable {
 	}
 
 	private void events() {
+		
+		
 		canvas.setOnKeyPressed(e -> {
-			switch (screen) {
-			case 0:
-				s1.onKeyPressed(e);
-				break;
-			case 1:
-				s2.onKeyPressed(e);
-				break;
-
-			}
+			screens.get(screen).onKeyPressed(e);
 		});
 
+		
+		
 		canvas.setOnMouseClicked(e -> {
-			switch (screen) {
-			case 0:
-				s1.onClick();
-				break;
-			case 1:
-				s2.onClick();
-				break;
-
-			}
+			screens.get(screen).onClick(e);	
 		});
 	}
 
